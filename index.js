@@ -19,6 +19,7 @@ app.use(express.json());
 
 //static files
 app.use(express.static("public"));
+app.use('/uploads', express.static("uploads"));
 
 //flash messages
 app.use(flash());
@@ -51,6 +52,14 @@ app.set("view engine", "ejs");
 //autentikasi dan beranda
 app.use("/", require("./server/routes/user"));
 
+//daftar dokter dan jadwal dokter
+app.use("/", require("./server/routes/dokter"));
+
+//halaman pengaturan
+app.use("/pengaturan", require("./server/routes/pengaturan"));
+
+//create table API
+app.use("/create_table", require("./server/routes/create_table"));
 
 app.get("/notfound", (req, res) => {
   res.status(404).render("layouts/notfound.ejs", { title: "Not Found" });

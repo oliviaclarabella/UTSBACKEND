@@ -1,0 +1,127 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / Dokter</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Daftar Dokter
+        </h1>
+      </div>
+      <div class="mb-3" style="text-align: right;">
+        <a href="/pengaturan/tambah_dokter" type="button" class="btn btn-outline-primary btn-block btn-flat" style="font-size: 14px; border-radius: 5px; padding: 8px 10px;">
+          <i class="fa fa-plus" style="margin-right: 5px;"></i> Tambah Dokter
+        </a>
+      </div>
+      <div class="row g-5">
+        <table id="tabel-pengaturan" class="table table-bordered table-hover" style="width:100%">
+          <thead>
+              <tr>
+                  <th></th>
+                  <th style="text-align: center;">Foto</th>
+                  <th>Nama</th>
+                  <th>Biaya</th>
+                  <th>Spesialis</th>
+                  <th>Aksi</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% list_dokter.forEach(function(value, index) { %>
+              <tr data-id="<%= index %>">
+                <td class="details-control"></i></td>
+                <td style="text-align: center;">
+                <% if(value['foto'] != null && value['foto'] != '' && value['foto'] != undefined){%>
+                  <img src="/<%=value['foto']%>" width="80" height="80" style="border-radius: 50%; max-width: 80%; max-height: 80%; object-fit: cover;">
+                <%}else{%>
+                  <img src="/images/image-notfound.png" width="80" height="80" style="border-radius: 50%; max-width: 80%; max-height: 80%; object-fit: cover;">
+                <%}%></td>
+                <td><%= value['nama'] %></td>
+                <td><%= value['biaya'] %></td>
+                <td><%= value['spesialis'] ? value['spesialis']['nama'] : '' %></td>
+                <td>
+                  <a href="/pengaturan/ubah_dokter/<%=value[`_id`]%>" type="button" class="btn btn-primary btn-block btn-sm" style="margin-right:10px; max-width: 90px; padding: 5px 10px;">
+                  <i class="fa fa-edit" style="margin-right:10px"></i>Ubah
+                  </a>
+                  <button type="button" type="button" class="btn btn-danger btn-block btn-sm" style="margin-top: 0px; max-width: 90px; padding: 5px 10px;"
+                  onclick="hapusData('<%=value[`_id`]%>', '<%=value[`nama`]%>')" 
+                  >
+                    <i class="fa fa-trash" style="margin-right:10px"></i>Hapus
+                  </button>  
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Services End -->
+
+<script>
+  jQuery.noConflict();
+(function($) {
+    $(document).ready(function() {
+        
+      const dokters_list = JSON.parse(`<%- unescape(JSON.stringify(list_dokter).replace(/\\/g, '\\\\')) %>`);
+        var table = $('#tabel-pengaturan').DataTable({
+          "order": [[ 2, "asc" ]],
+          "columns": [
+            // Add more column definitions as needed
+            { "data": null, "orderable": false, "className": "details-control", "defaultContent": "<i class='fa fa-sort-up arrow-icon'></i>" }, // This column will contain the control to show/hide row details
+            { "data": "foto", "orderable": false },
+            { "data": "nama" },
+            { "data": "biaya" },
+            { "data": "spesialis" },
+            { "data": "aksi", "orderable": false }
+          ],
+          "columnDefs": [
+            { "width": "120px", "targets": [1] },
+            { "width": "220px", "targets": [4] } // Set specific column widths
+          ]
+        });
+        
+        // Add event listener for opening and closing details
+        $('#tabel-pengaturan tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+
+            $(this).find('.arrow-icon').toggleClass('fa-sort-up fa-sort-down');
+
+            var row = table.row(tr);
+
+            var dataId = tr.data('id');
+            
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(getRowDetail(dataId)).show();
+                tr.addClass('shown');
+            }
+        });
+        
+        // Function to format the row details
+        function getRowDetail(index) {
+            // `d` is the original data object for the row
+            return '<div style="padding-left: 15px;">'+ dokters_list[index]['deskripsi'].replace(/\r\n/g, "<br>").replace(/\\n/g, "<br>"); +'</div>';
+        }
+    });
+})(jQuery);
+
+
+  function hapusData(id, nama){
+    var isDelete = confirm('Apakah anda yakin akan menghapus dokter "' + nama +'"');
+
+    if(isDelete){
+      document.location.href='/pengaturan/dokter/hapus/'+ id;
+    }
+  }
+</script>
+<%- include('../../layouts/footer.ejs')%>

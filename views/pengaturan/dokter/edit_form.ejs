@@ -1,0 +1,102 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / 
+        <a href="/pengaturan/dokter">Dokter</a> / Ubah</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Form Ubah Dokter
+        </h1>
+      </div>
+      <div class="row g-5" style="display: flex; justify-content: center;">
+        <div style="max-width: 500px;">
+          <form method="post" action="/pengaturan/dokter/ubah" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<%= data ? data['_id'] : ''%>"/>
+
+            <div class="form-group" style="text-align: center;">
+              <% if(data['foto'] != null && data['foto'] != ''){%>
+                <img id="previewImage" src="/<%=data['foto']%>" alt="Preview Image" style="max-width: 150px; max-height: 150px; border-radius: 300%; object-fit: cover;">
+              <%} else {%>
+                <img id="previewImage" src="/images/image-notfound.png" alt="Preview Image" style="max-width: 150px; max-height: 150px; border-radius: 300%; object-fit: cover;">
+                <% } %>
+              <br/><br/>
+              <input type="file" name="file" id="fileInput" required accept="image/png, image/jpeg, image/jpg">
+            </div>
+            
+
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Nama</label>
+              <input type="text" class="form-control" name="nama" placeholder="" required value="<%= data ? data['nama'] : ''%>">
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="spesialisSelect">Spesialis</label>
+              <select class="form-control" id="spesialisSelect" name="spesialis" required>
+                <option value="">Pilih Spesialis</option>
+                <% list_spesialis.forEach(function(value) { %>
+                  <option value="<%= value['_id'] %>" <%= data ? data['spesialis'].toString() == value['_id'] ? 'selected': '' : '' %> > <%= value['nama'] %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="exampleFormControlInput1">Biaya</label>
+              <input type="number" class="form-control" name="biaya" placeholder="" required value="<%= data ? data['biaya'] : ''%>">
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="exampleFormControlInput1">Deskripsi</label>
+
+              <textarea class="form-control" name="deskripsi" placeholder="" style="min-height: 120px;"><%= data ? data['deskripsi'].replace(/\\n/g, "\n") : ''%></textarea>
+            </div>
+
+            <div class="mt-5" style="display: flex; justify-content: space-between;">
+              <a href="/pengaturan/dokter" type="button" type="button" class="btn btn-light btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Kembali
+              </a>  
+              <button type="submit" type="button" class="btn btn-primary btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Ubah
+              </button>  
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  // Get references to the file input and preview image elements
+  const fileInput = document.getElementById('fileInput');
+  const previewImage = document.getElementById('previewImage');
+  
+  // Add event listener to the file input element
+  fileInput.addEventListener('change', function() {
+    // Check if any file is selected
+    if (this.files && this.files[0]) {
+      // Read the selected file as a URL
+      const reader = new FileReader();
+      
+      reader.onload = function(e) {
+        // Set the src attribute of the preview image to the URL of the selected file
+        previewImage.src = e.target.result;
+        // Display the preview image
+        previewImage.style.display = 'inline';
+      }
+      
+      // Read the selected file
+      reader.readAsDataURL(this.files[0]);
+    } else {
+      // If no file is selected, hide the preview image
+      previewImage.src = '';
+      previewImage.style.display = 'none';
+    }
+  });
+</script>
+<!-- Services End -->
+<%- include('../../layouts/footer.ejs')%>

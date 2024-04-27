@@ -1,0 +1,74 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / 
+        <a href="/pengaturan/jadwal_dokter">Jadwal Dokter</a> /
+        Tambah </div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Form Tambah Jadwal Dokter
+        </h1>
+      </div>
+      <div class="row g-5" style="display: flex; justify-content: center;">
+        <div style="max-width: 500px;">
+          <form method="post" action="/pengaturan/jadwal_dokter/tambah">
+            <div class="form-group" style="position: relative">
+              <label for="exampleFormControlInput1">Tanggal</label>
+              <div class="date" id="date" data-target-input="nearest">
+                <input name="tanggal" type="text" required
+                    class="form-control bg-white border-0 datetimepicker-input"
+                    placeholder="dd/mm/yyyy" data-target="#date" data-toggle="datetimepicker" style="height: 40px; border: 1px solid #ced4da !important;">
+              </div>
+            </div>
+
+            <div class="form-group mt-2"  style="display: flex; justify-content: space-between;">
+              <div style="position: relative">
+                <label for="exampleFormControlInput1">Waktu Mulai</label>
+                <div class="time" id="waktu_mulai" data-target-input="nearest">
+                  <input name="waktu_mulai" type="text" required
+                      class="form-control bg-white border-0 datetimepicker-input"
+                      placeholder="" data-target="#waktu_mulai" data-toggle="datetimepicker" style="height: 40px; border: 1px solid #ced4da !important;">
+                </div>
+              </div>
+              <div style="position: relative">
+                <label for="exampleFormControlInput1">Waktu Akhir</label>
+                <div class="time" id="waktu_akhir" data-target-input="nearest">
+                  <input name="waktu_akhir" type="text" required
+                      class="form-control bg-white border-0 datetimepicker-input"
+                      placeholder="" data-target="#waktu_akhir" data-toggle="datetimepicker" style="height: 40px; border: 1px solid #ced4da !important;">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="dokterSelect">Dokter</label>
+              <select class="form-control" id="dokterSelect" name="dokter" required>
+                <option value="">Pilih Dokter</option>
+                <% list_dokter.forEach(function(value) { %>
+                  <option value="<%= value['_id'] %>"><%= value['nama'] %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="mt-5" style="display: flex; justify-content: space-between;">
+              <a href="/pengaturan/jadwal_dokter" type="button" type="button" class="btn btn-light btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Kembali
+              </a>  
+              <button type="submit" type="button" class="btn btn-primary btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Tambah
+              </button>  
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Services End -->
+<%- include('../../layouts/footer.ejs')%>

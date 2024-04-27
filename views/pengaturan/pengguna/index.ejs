@@ -1,0 +1,91 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / Pengguna</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Daftar Pengguna
+        </h1>
+      </div>
+      <div class="mb-3" style="text-align: right;">
+        <a href="/pengaturan/tambah_pengguna" type="button" class="btn btn-outline-primary btn-block btn-flat" style="font-size: 14px; border-radius: 5px; padding: 8px 10px;">
+          <i class="fa fa-plus" style="margin-right: 5px;"></i> Tambah Pengguna
+        </a>
+      </div>
+      <div class="row g-5">
+        <table id="tabel-pengaturan" class="table table-bordered table-hover" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Nama</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>No HP</th>
+                  <th>Level Pengguna</th>
+                  <th>Aksi</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% list_user.forEach(function(value) { %>
+              <tr>
+                  <td><%= value['nama'] %></td>
+                  <td><%= value['username'] %></td>
+                  <td><%= value['email'] %></td>
+                  <td><%= value['noHp'] %></td>
+                  <td><%= value['idLevelPengguna'] == 1 ? "Administrator" : "Pasien" %></td>
+                  <td>
+                    <a href="/pengaturan/ubah_pengguna/<%=value[`_id`]%>" type="button" class="btn btn-primary btn-block btn-sm" style="margin-right:10px; max-width: 90px; padding: 5px 10px;"
+                    data-toggle="modal" data-target="#pengguna_modal" data-keyboard="false" data-backdrop="static" data-id="<%= value[`_id`] %>">
+                    <i class="fa fa-edit" style="margin-right:10px"></i>Ubah
+                    </a>
+                    <button type="button" type="button" class="btn btn-danger btn-block btn-sm" style="margin-top: 0px; max-width: 90px; padding: 5px 10px;"
+                    onclick="hapusData('<%=value[`_id`]%>', '<%=value[`nama`]%>')" 
+                    >
+                      <i class="fa fa-trash" style="margin-right:10px"></i>Hapus
+                    </button>  
+                  </td>
+              </tr>
+            <% }); %>
+          </tbody>
+      </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Services End -->
+
+<script>
+  jQuery.noConflict();
+(function($) {
+    $(document).ready(function() {
+        $('#tabel-pengaturan').DataTable({
+          "columnDefs": [
+            { "width": "220px", "targets": [5] } // Set specific column widths
+          ],
+          "columns": [
+            // Add more column definitions as needed
+            { "data": "nama" },
+            { "data": "username" },
+            { "data": "email" },
+            { "data": "noHp" },
+            { "data": "levelPengguna" },
+            { "data": "aksi", "orderable": false }
+          ]
+        });
+    });
+})(jQuery);
+
+  function hapusData(id, nama){
+    var isDelete = confirm('Apakah anda yakin akan menghapus pengguna "' + nama +'"');
+
+    if(isDelete){
+      document.location.href='/pengaturan/pengguna/hapus/'+ id;
+    }
+  }
+</script>
+<%- include('../../layouts/footer.ejs')%>

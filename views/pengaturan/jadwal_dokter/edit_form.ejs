@@ -1,0 +1,100 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / 
+        <a href="/pengaturan/jadwal_dokter">Jadwal Dokter</a> / Ubah</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Form Ubah Jadwal Dokter
+        </h1>
+      </div>
+      <div class="row g-5" style="display: flex; justify-content: center;">
+        <div style="max-width: 500px;">
+          <form method="post" action="/pengaturan/jadwal_dokter/ubah">
+            <input type="hidden" name="id" value="<%= data ? data['_id'] : ''%>"/>
+            <div class="form-group" style="position: relative">
+              <label for="exampleFormControlInput1">Tanggal</label>
+              <div class="date" id="date" data-target-input="nearest">
+                <input name="tanggal" type="text" required
+                    class="form-control bg-white border-0 datetimepicker-input"
+                    placeholder="dd/mm/yyyy" data-target="#date" data-toggle="datetimepicker" style="height: 40px; border: 1px solid #ced4da !important;"
+                    value="<%= data ? formatDate(data['tanggal']) : ''%>"
+                    >
+              </div>
+            </div>
+
+            <div class="form-group mt-2"  style="display: flex; justify-content: space-between;">
+              <div style="position: relative">
+                <label for="exampleFormControlInput1">Waktu Mulai</label>
+                <div class="time" id="waktu_mulai" data-target-input="nearest">
+                  <input name="waktu_mulai" type="text" required
+                      class="form-control bg-white border-0 datetimepicker-input"
+                      placeholder="" data-target="#waktu_mulai" data-toggle="datetimepicker" style="height: 40px; border: 1px solid #ced4da !important;"
+                      value="<%= data ? data['waktu_mulai'] : ''%>"
+                      >
+                </div>
+              </div>
+              <div style="position: relative">
+                <label for="exampleFormControlInput1">Waktu Akhir</label>
+                <div class="time" id="waktu_akhir" data-target-input="nearest">
+                  <input name="waktu_akhir" type="text" required
+                      class="form-control bg-white border-0 datetimepicker-input"
+                      placeholder="" data-target="#waktu_akhir" data-toggle="datetimepicker" style="height: 40px; border: 1px solid #ced4da !important;"
+                      value="<%= data ? data['waktu_akhir'] : ''%>"
+                      >
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="dokterSelect">Dokter</label>
+              <select class="form-control" id="dokterSelect" name="dokter" required>
+                <option value="">Pilih Dokter</option>
+                <% list_dokter.forEach(function(value) { %>
+                  <option value="<%= value['_id'] %>" <%= data ? data['dokter'].toString() == value['_id'] ? 'selected': '' : '' %> ><%= value['nama'] %></option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="statusJadwalSelect">Status Jadwal</label>
+              <select class="form-control" id="statusJadwalSelect" name="status_jadwal" required>
+                <option value="" disabled>Pilih Status Jadwal</option>
+                <option value="tersedia" <%= data ? data['status_jadwal'] == "tersedia" ? 'selected': '' : ''%>>Tersedia</option>
+                <option value="diajukan" <%= data ? data['status_jadwal'] == "diajukan" ? 'selected': '' : ''%>>Diajukan</option>
+                <option value="dibatalkan" <%= data ? data['status_jadwal'] == "dibatalkan" ? 'selected': '' : ''%>>Dibatalkan</option>
+                <option value="selesai" <%= data ? data['status_jadwal'] == "selesai" ? 'selected': '' : ''%>>Selesai</option>
+              </select>
+            </div>
+
+            <div class="mt-5" style="display: flex; justify-content: space-between;">
+              <a href="/pengaturan/jadwal_dokter" type="button" type="button" class="btn btn-light btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Kembali
+              </a>  
+              <button type="submit" type="button" class="btn btn-primary btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Ubah
+              </button>  
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%
+function formatDate(dateTime) {
+  const year = dateTime.getFullYear();
+  const month = String(dateTime.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1
+  const day = String(dateTime.getDate()).padStart(2, '0');
+  // Return the formatted date string in "YYYY-MM-DD" format
+  return `${day}/${month}/${year}`;
+}
+%>
+<!-- Services End -->
+<%- include('../../layouts/footer.ejs')%>

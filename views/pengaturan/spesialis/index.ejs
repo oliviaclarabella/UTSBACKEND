@@ -1,0 +1,80 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / Spesialis</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Daftar Spesialis
+        </h1>
+      </div>
+      <div class="mb-3" style="text-align: right;">
+        <a href="/pengaturan/tambah_spesialis" type="button" class="btn btn-outline-primary btn-block btn-flat" style="font-size: 14px; border-radius: 5px; padding: 8px 10px;">
+          <i class="fa fa-plus" style="margin-right: 5px;"></i> Tambah Spesialis
+        </a>
+      </div>
+      <div class="row g-5">
+        <table id="tabel-pengaturan" class="table table-bordered table-hover" style="width:100%">
+          <thead>
+              <tr>
+                  <th>Nama</th>
+                  <th style="max-width: 300px;">Aksi</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% list_spesialis.forEach(function(value, index) { %>
+              <tr>
+                <td><%= value['nama'] %></td>
+                <td style="max-width: 300px;">
+                  <a href="/pengaturan/ubah_spesialis/<%=value[`_id`]%>" type="button" class="btn btn-primary btn-block btn-sm" style="margin-right:10px; max-width: 90px; padding: 5px 10px;">
+                  <i class="fa fa-edit" style="margin-right:10px"></i>Ubah
+                  </a>
+                  <button type="button" type="button" class="btn btn-danger btn-block btn-sm" style="margin-top: 0px; max-width: 90px; padding: 5px 10px;"
+                  onclick="hapusData('<%=value[`_id`]%>', '<%=value[`nama`]%>')" 
+                  >
+                    <i class="fa fa-trash" style="margin-right:10px"></i>Hapus
+                  </button>  
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Services End -->
+
+<script>
+  jQuery.noConflict();
+(function($) {
+    $(document).ready(function() {
+      var table = $('#tabel-pengaturan').DataTable({
+        "order": [[ 0, "asc" ]],
+        "columnDefs": [
+            { "width": "220px", "targets": [1] } // Set specific column widths
+        ],
+        "columns": [
+            // Add more column definitions as needed
+            { "data": "nama" },
+            { "data": "aksi", "orderable": false }
+          ]
+      });
+    });
+})(jQuery);
+
+
+  function hapusData(id, nama){
+    var isDelete = confirm('Apakah anda yakin akan menghapus spesialis "' + nama +'"');
+
+    if(isDelete){
+      document.location.href='/pengaturan/spesialis/hapus/'+ id;
+    }
+  }
+</script>
+<%- include('../../layouts/footer.ejs')%>

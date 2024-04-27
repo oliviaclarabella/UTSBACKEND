@@ -1,0 +1,41 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / 
+        <a href="/pengaturan/spesialis">Spesialis</a> /
+        Tambah </div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Form Tambah Spesialis
+        </h1>
+      </div>
+      <div class="row g-5" style="display: flex; justify-content: center;">
+        <div style="max-width: 500px;">
+          <form method="post" action="/pengaturan/spesialis/tambah">
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Nama</label>
+              <input type="text" class="form-control" name="nama" placeholder="" required>
+            </div>
+
+            <div class="mt-5" style="display: flex; justify-content: space-between;">
+              <a href="/pengaturan/spesialis" type="button" type="button" class="btn btn-light btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Kembali
+              </a>  
+              <button type="submit" type="button" class="btn btn-primary btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Tambah
+              </button>  
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Services End -->
+<%- include('../../layouts/footer.ejs')%>

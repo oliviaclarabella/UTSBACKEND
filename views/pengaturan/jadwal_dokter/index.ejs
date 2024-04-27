@@ -1,0 +1,126 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / Jadwal Dokter</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Jadwal Dokter
+        </h1>
+      </div>
+      <div class="mb-3" style="text-align: right;">
+        <a href="/pengaturan/tambah_jadwal_dokter" type="button" class="btn btn-outline-primary btn-block btn-flat" style="font-size: 14px; border-radius: 5px; padding: 8px 10px;">
+          <i class="fa fa-plus" style="margin-right: 5px;"></i> Tambah Jadwal Dokter
+        </a>
+      </div>
+      <div class="row g-5">
+        <table id="tabel-pengaturan" class="table table-bordered table-hover" style="width:100%">
+          <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Waktu Mulai</th>
+                <th>Waktu Akhir</th>
+                <th>Dokter</th>
+                <th>Status Jadwal</th>
+                <th style="max-width: 300px;">Aksi</th>
+              </tr>
+          </thead>
+          <tbody>
+            <% list_jadwal_dokter.forEach(function(value, index) { %>
+              <tr>
+                <td><%= value['tanggal'] %></td>
+                <td><%= value['waktu_mulai'] %></td>
+                <td><%= value['waktu_akhir'] %></td>
+                <td><%= value['dokter'] ? value['dokter']['nama'] : '' %></td>
+                <td><%- getStatusJadwal(value['status_jadwal']) %></td>              
+                <td style="max-width: 300px;">
+                  <a href="/pengaturan/ubah_jadwal_dokter/<%=value[`_id`]%>" type="button" class="btn btn-primary btn-block btn-sm" style="margin-right:10px; max-width: 90px; padding: 5px 10px;">
+                  <i class="fa fa-edit" style="margin-right:10px"></i>Ubah
+                  </a>
+                  <button type="button" type="button" class="btn btn-danger btn-block btn-sm" style="margin-top: 0px; max-width: 90px; padding: 5px 10px;"
+                  onclick="hapusData('<%=value[`_id`]%>')" 
+                  >
+                    <i class="fa fa-trash" style="margin-right:10px"></i>Hapus
+                  </button>  
+                </td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Services End -->
+<%
+
+function getStatusJadwal(status){
+  var colour = 'black';
+  if(status === "tersedia") colour = "#0da709";
+  else if(status === "diajukan") colour = "#ffc107";
+  else if(status === "dibatalkan") colour = "#d60e22";
+
+  return `<div style="font-weight:600;color:${colour}">${status}</div>`;
+}
+%>
+
+<script>
+  jQuery.noConflict();
+(function($) {
+    $(document).ready(function() {
+      var table = $('#tabel-pengaturan').DataTable({
+        "order": [[ 0, "desc" ], [1, 'desc']],
+        "ordering": true,
+        "orderMulti": true,
+        "shiftClick": true,
+        "columnDefs": [
+            { "width": "220px", "targets": [5] }, // Set specific column widths
+            { "width": "150px", "targets": [1, 2] }, // Set specific column widths
+            {
+                "targets": 0, // Assuming the date column is the first column (index 0)
+                "render": function (data, type, row) {
+                    // Parse the date string to a JavaScript Date object
+                    var date = new Date(data);
+                    // Create an array of week names
+                    var weekNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+                    // Get the week name
+                    var weekName = weekNames[date.getDay()];
+                    // Get the day of the month
+                    var day = date.getDate();
+                    // Get the month name
+                    var monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                    var monthName = monthNames[date.getMonth()];
+                    // Get the year
+                    var year = date.getFullYear();
+                    // Format the date string as 'weekname, day month year'
+                    var formattedDate = weekName + ', ' + day + ' ' + monthName + ' ' + year;
+                    // Return the formatted date
+                    if (type === 'sort' || type === 'type') {
+                        // For sorting and type detection, return a sortable format
+                        return year + '-' + (date.getMonth() + 1).toString().padStart(2, '0') + '-' + day.toString().padStart(2, '0');
+                    } else {
+                        // For display, return the formatted date
+                        return formattedDate;
+                    }
+                }
+            }
+        ]
+      });
+    });
+})(jQuery);
+
+
+  function hapusData(id){
+    var isDelete = confirm('Apakah anda yakin akan menghapus jadwal ini');
+
+    if(isDelete){
+      document.location.href='/pengaturan/jadwal_dokter/hapus/'+ id;
+    }
+  }
+</script>
+<%- include('../../layouts/footer.ejs')%>

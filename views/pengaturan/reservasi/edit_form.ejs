@@ -1,0 +1,115 @@
+<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<!-- Services Start -->
+<div style="min-height: calc(100vh - 160px);">
+  <div class="container-fluid py-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / 
+        <a href="/pengaturan/reservasi">Reservasi</a> / Ubah Status</div>
+      <div class="text-center mx-auto mb-3" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Form Ubah Status Reservasi
+        </h1>
+      </div>
+      <div class="row g-5" style="display: flex; justify-content: center;">
+        <div style="max-width: 500px;">
+          <form method="post" action="/pengaturan/reservasi/ubah">
+            <input type="hidden" name="id" value="<%= data ? data['_id'] : ''%>"/>
+            <div class="form-group" style="position: relative">
+              <label for="exampleFormControlInput1">Tanggal</label>
+              <div class="date" id="date" data-target-input="nearest">
+                <input name="tanggal" type="text" required
+                    class="form-control bg-white border-0 datetimepicker-input"
+                    placeholder="dd/mm/yyyy" data-target="#date" data-toggle="datetimepicker" 
+                    style="height: 40px; border: 1px solid #ced4da !important; background-color: #e9ecef !important;"
+                    value="<%= data['jadwal'] ? data['jadwal']['tanggal'] ? formatDate(data['jadwal']['tanggal']) : '' : '' %>"
+                    disabled
+                    >
+              </div>
+            </div>
+
+            <div class="form-group mt-2"  style="display: flex; justify-content: space-between;">
+              <div style="position: relative">
+                <label for="exampleFormControlInput1">Waktu Mulai</label>
+                <div class="time" id="waktu_mulai" data-target-input="nearest">
+                  <input name="waktu_mulai" type="text" required
+                      class="form-control bg-white border-0 datetimepicker-input"
+                      placeholder="" data-target="#waktu_mulai" data-toggle="datetimepicker" 
+                      style="height: 40px; border: 1px solid #ced4da !important; background-color: #e9ecef !important;"
+                      value="<%= data['jadwal'] ? data['jadwal']['waktu_mulai'] : ''%>"
+                      disabled
+                      >
+                </div>
+              </div>
+              <div style="position: relative">
+                <label for="exampleFormControlInput1">Waktu Akhir</label>
+                <div class="time" id="waktu_akhir" data-target-input="nearest">
+                  <input name="waktu_akhir" type="text" required
+                      class="form-control bg-white border-0 datetimepicker-input"
+                      placeholder="" data-target="#waktu_akhir" data-toggle="datetimepicker" 
+                      style="height: 40px; border: 1px solid #ced4da !important; background-color: #e9ecef !important;"
+                      value="<%= data['jadwal'] ? data['jadwal']['waktu_akhir'] : ''%>"
+                      disabled
+                      >
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="exampleFormControlInput1">Dokter</label>
+              <input type="text" class="form-control" name="nama_dokter" placeholder=""  
+              value="<%= data['jadwal'] ? data['jadwal']['dokter'] ? data['jadwal']['dokter']['nama'] : '' : ''%>"
+              disabled
+              >
+            </div>
+
+            <div class="form-group mt-2">
+              <label for="exampleFormControlInput1">Pengguna</label>
+              <input type="text" class="form-control" name="nama_pengguna" placeholder=""  
+              value="<%= data['user'] ? data['user']['nama'] : ''%>"
+              disabled
+              >
+            </div>
+
+            <% var dibatalkan = 0;
+
+            if(data['dibatalkan']){ dibatalkan = 1; }
+
+            %>
+            <div class="form-group mt-2">
+              <label for="statusJadwalSelect">Status Reservasi</label>
+              <select class="form-control" id="statusJadwalSelect" name="status_pembatalan" required>
+                <option value="" disabled>Pilih Status Reservasi</option>
+                <option value="diajukan" <%= !dibatalkan ? 'selected' : ''%>>Diajukan</option>
+                <option value="dibatalkan" <%= dibatalkan ? 'selected': ''%>>Dibatalkan</option>
+              </select>
+            </div>
+
+            <div class="mt-5" style="display: flex; justify-content: space-between;">
+              <a href="/pengaturan/reservasi" type="button" type="button" class="btn btn-light btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Kembali
+              </a>  
+              <button type="submit" type="button" class="btn btn-primary btn-block btn-sm" style="margin-top: 0px; padding: 10px 10px; font-size: 16px; font-weight: 400;">
+                Ubah
+              </button>  
+            </div>
+          </form>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%
+function formatDate(dateTime) {
+  const year = dateTime.getFullYear();
+  const month = String(dateTime.getMonth() + 1).padStart(2, '0'); // Month is zero-based, so add 1
+  const day = String(dateTime.getDate()).padStart(2, '0');
+  // Return the formatted date string in "YYYY-MM-DD" format
+  return `${day}/${month}/${year}`;
+}
+%>
+<!-- Services End -->
+<%- include('../../layouts/footer.ejs')%>
