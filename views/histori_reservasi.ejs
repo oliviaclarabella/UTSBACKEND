@@ -1,34 +1,28 @@
-<%- include('../../layouts/head.ejs')%> <%- include('../../layouts/navbar.ejs')%>
+<%- include('layouts/head.ejs')%> <%- include('layouts/navbar.ejs')%>
 <!-- Services Start -->
 <div style="min-height: calc(100vh - 160px);">
   <div class="container-fluid py-5">
     <div class="container">
-      <div style="font-weight: 500; margin-bottom: 20px;"><a href="/pengaturan">Pengaturan</a> / Reservasi Dokter</div>
       <div class="text-center mx-auto mb-3" style="max-width: 500px">
         <h1
           class="display-4"
           style="color: 1D2A4D; font-size: 30px; font-weight: 600"
         >
-          Reservasi Dokter
+          Histori Reservasi
         </h1>
-      </div>
-      <div class="mb-3" style="text-align: right;">
-        <a href="/pengaturan/tambah_jadwal_dokter" type="button" class="btn btn-outline-primary btn-block btn-flat" style="font-size: 14px; border-radius: 5px; padding: 8px 10px;">
-          <i class="fa fa-plus" style="margin-right: 5px;"></i> Tambah Jadwal Dokter
-        </a>
       </div>
       <div class="row g-5">
         <table id="tabel-pengaturan" class="table table-bordered table-hover" style="width:100%">
           <thead>
               <tr>
-                <th>Tanggal</th>
-                <th>Waktu Mulai</th>
-                <th>Waktu Akhir</th>
-                <th>Dokter</th>
-                <th>Pasien</th>
-                <th>Tanggal Diajukan</th>
-                <th>Status Reservasi</th>
-                <th>Aksi</th>
+                  <th>Tanggal</th>
+                  <th>Waktu Mulai</th>
+                  <th>Waktu Akhir</th>
+                  <th>Dokter</th>
+                  <th>Biaya</th>
+                  <th>Tanggal Diajukan</th>
+                  <th>Status Reservasi</th>
+                  <th>Aksi</th>
               </tr>
           </thead>
           <tbody>
@@ -38,15 +32,15 @@
                   <td><%= value['jadwal'] ? value['jadwal']["waktu_mulai"] : '' %></td>
                   <td><%= value['jadwal'] ? value['jadwal']["waktu_akhir"] : '' %></td>
                   <td><%= value['jadwal'] ? value['jadwal']["dokter"] ? value['jadwal']['dokter']['nama']: "" : "" %></td>
-                  <td><%= value['user'] ? value['user']["nama"] : "" %></td>
+                  <td><%= value['jadwal'] ? value['jadwal']['dokter'] ? value['jadwal']['dokter']["biaya"] ?  "Rp. " + formatNumberWithDots(value['jadwal']['dokter']['biaya']): "" : "":"" %></td>
                   <td><%= formatDateWithTime(value['tanggal_pengajuan']) %></td>
                   
-                  <% var status_jadwal = "diajukan";
+                  <% var status_jadwal = "";
 
                     if(value["dibatalkan"]){
                       status_jadwal = "dibatalkan";
                     }else if(value['jadwal']){
-                      if(value['jadwal']['status_jadwal'] != "tersedia"){
+                      if(value['jadwal']['status_jadwal']){
                         status_jadwal = value['jadwal']['status_jadwal'];
                       }
                     }
@@ -66,25 +60,24 @@
                     </div>
                   </td>
                   <td>
-                    <a href="/pengaturan/ubah_reservasi/<%=value[`_id`]%>" type="button" class="btn btn-primary btn-block btn-sm" style="margin-right:10px; max-width: 90px; padding: 5px 10px;">
-                      <i class="fa fa-edit" style="margin-right:10px"></i>Ubah
-                      </a>
-                      <button type="button" type="button" class="btn btn-danger btn-block btn-sm" style="margin-top: 0px; max-width: 90px; padding: 5px 10px;"
-                      onclick="hapusData('<%=value[`_id`]%>', '<%=value[`nama`]%>')" 
-                      >
-                        <i class="fa fa-trash" style="margin-right:10px"></i>Hapus
-                      </button>  
+                    <% if(status_jadwal === "diajukan") { %>
+                    <button type="button" type="button" class="btn btn-danger btn-block btn-sm" style="margin-top: 0px; max-width: 90px; padding: 5px 10px;"
+                    onclick="ubahStatus('<%=value[`_id`]%>')" 
+                    >
+                      <i class="fa fa-times" style="margin-right:10px"></i>Batal
+                    </button>  
+                    <% } %>
                   </td>
               </tr>
             <% }); %>
           </tbody>
-        </table>
+      </table>
       </div>
       </div>
     </div>
   </div>
 </div>
-<!-- Services End -->
+
 <% function formatNumberWithDots(number) { return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); } %>
 
 <%
@@ -136,8 +129,8 @@ function formatDate(date) {
       var table = $('#tabel-pengaturan').DataTable({
         "order": [[ 0, "desc" ]],
         "columnDefs": [
-            { "width": "220px", "targets": [7] }, // Set specific column widths
-            { "width": "100px", "targets": [1, 2] }, // Set specific column widths
+            { "width": "120px", "targets": [7] }, // Set specific column widths
+            { "width": "140px", "targets": [1, 2] }, // Set specific column widths
             {
                 "targets": 0, // Assuming the date column is the first column (index 0)
                 "render": function (data, type, row) {
@@ -171,13 +164,12 @@ function formatDate(date) {
     });
 })(jQuery);
 
-
-  function hapusData(id){
-    var isDelete = confirm('Apakah anda yakin akan menghapus reservasi ini?');
+  function ubahStatus(id_reservasi){
+    var isDelete = confirm('Apakah anda ingin membatalkan reservasi dokter pada tanggal ini?');
 
     if(isDelete){
-      document.location.href='/pengaturan/reservasi/hapus/'+ id;
+      document.location.href='/reservasi/'+ id_reservasi + '/batal';
     }
-  }
+  } 
 </script>
-<%- include('../../layouts/footer.ejs')%>
+<%- include('layouts/footer.ejs')%>

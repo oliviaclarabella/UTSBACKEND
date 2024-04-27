@@ -1,0 +1,62 @@
+<%- include('layouts/head.ejs')%> <%- include('layouts/navbar.ejs')%>
+
+<div style="min-height: calc(100vh - 160px)">
+  <!-- Contact Start -->
+  <div class="container-fluid pt-5">
+    <div class="container">
+      <div style="font-weight: 500; margin-bottom: 20px">
+        <a href="/dokter">Dokter</a> / Detail Dokter
+      </div>
+
+      <div class="row gx-5">
+        <div class="col-lg-4 mb-4 mb-lg-0" style="min-height: 500px">
+          <div class="position-relative h-100">
+            <% if(data && data['foto'] != null && data['foto'] != '' &&
+            data['foto'] != undefined){%>
+            <img
+              class="position-absolute w-100 h-100 rounded"
+              src="/<%=data['foto']%>"
+              style="object-fit: cover"
+            />
+            <%}else{%>
+            <img
+              class="position-absolute w-100 h-100 rounded"
+              src="/images/image-notfound.png"
+              style="object-fit: cover"
+            />
+            <%}%>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="mb-4">
+            <h5
+              class="d-inline-block text-primary text-uppercase border-bottom border-5"
+            >
+              <%= data ? data['spesialis'] ? data['spesialis']['nama'] : ''
+              :''%>
+            </h5>
+            <h5 class="display-4" style="font-size: 40px">
+              <%= data ? data['nama'] :''%>
+            </h5>
+          </div>
+          <h5 class="mb-3">
+            Biaya:
+            <span style="color: #1070ae; margin-left: 8px"
+              >Rp. <%= data['biaya'] ? formatNumberWithDots(data['biaya']) : '-'
+              %>,-</span
+            >
+          </h5>
+          <p>
+            <%= data['deskripsi'] ? data['deskripsi'].replace(/\r\n/g, "<br />").replace(/\\n/g,
+            "<br />") : '' %>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Contact End -->
+</div>
+<% function formatNumberWithDots(number) { return
+number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); } %> <%-
+include('layouts/footer.ejs')%> <% function formatNumberWithDots(number) {
+return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); } %>

@@ -1,0 +1,221 @@
+<%- include('layouts/head.ejs')%> <%- include('layouts/navbar.ejs')%>
+<div style="min-height: calc(100vh - 160px)">
+    <!-- Search Start -->
+    <div class="container-fluid pt-5">
+      <div class="container">
+        <div class="text-center mx-auto mb-5" style="max-width: 500px">
+          <h1
+            class="display-4 mb-4"
+            style="color: #1d2a4d !important; font-weight: 600; font-size: 40px"
+          >
+            Jadwal Dokter
+          </h1>
+        </div>
+        <form method="POST" id="jadwal-filter-form" action="/cari-jadwal">
+          <div class="mx-auto" style="width: 100%; max-width: 800px">
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                margin-bottom: 30px;
+                justify-content: center;
+                position: relative;
+              "
+            >
+              <div
+                style="
+                  color: #1d2a4d;
+                  font-size: 20px;
+                  font-weight: 500;
+                  margin-right: 20px;
+                "
+              >
+                Tanggal Mulai :
+              </div>
+
+              <div class="date" id="date" data-target-input="nearest">
+                <input id="tanggal_mulai" name="tanggal_mulai" type="text" required
+                    class="form-control bg-white border-0 datetimepicker-input"
+                    placeholder="dd/mm/yyyy" data-target="#date" data-toggle="datetimepicker" 
+                    style="height: 55px; color: #1d2a4d; border: 1px solid #13c5dd !important"
+                    value="<%= tanggal_mulai %>"
+                    min
+                    >
+              </div>
+              <div
+                style="
+                  color: #1d2a4d;
+                  font-size: 20px;
+                  font-weight: 500;
+                  margin-left: 50px;
+                  margin-right: 20px;
+                "
+              >
+                Tanggal Selesai :
+              </div>
+              <div class="date" id="date-end" data-target-input="nearest">
+                <input id="tanggal_akhir" name="tanggal_akhir" type="text" required
+                    class="form-control bg-white border-0 datetimepicker-input"
+                    placeholder="dd/mm/yyyy" data-target="#date-end" data-toggle="datetimepicker" 
+                    style="height: 55px; color: #1d2a4d; border: 1px solid #13c5dd !important"
+                    value="<%= tanggal_akhir %>"
+                    >
+              </div>
+            </div>
+          </div>
+          <div class="mx-auto" style="width: 100%; max-width: 800px">
+            <div class="input-group">
+              <select
+                class="form-select border-primary w-25"
+                style="height: 60px; width: 200px !important; font-size: 18px; color: #1d2a4d;"
+                name="spesialis"
+              >
+                <option value="" <%= selected_spesialis == "" ? "selected": "" %>>Semua Spesialis</option>
+                <% list_spesialis.forEach(function(value) { %>
+                  <option value="<%= value['_id'] %>" 
+                    <%= selected_spesialis == value['_id'] ? "selected": "" %>><%= value['nama'] %></option>
+                <% }); %>
+              </select>
+              <input
+                type="text"
+                class="form-control border-primary w-50"
+                placeholder="cari nama dokter"
+                style="max-width: 380px !important; font-size: 20px; color: #1d2a4d;"
+                name="cari"
+                value="<%= cari ? cari : "" %>"
+              />
+              <button
+                class="btn btn-dark border-0 w-25"
+                style="
+                  max-width: 110px;
+                  background: #1d2a4d;
+                  font-size: 18px;
+                  font-weight: 600;
+                "
+              >
+                Cari
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Search End -->
+
+    <!-- Search Result Start -->
+    <div class="container-fluid py-5">
+      <div class="container">
+        <%
+        var total_jadwal = 0;
+        if (list_jadwal_dokter && list_jadwal_dokter.length > 0) {
+          total_jadwal = list_jadwal_dokter.length;
+        }
+
+        %>
+        <div class="mt-1 mb-3" style="text-align: right; font-size: 24px; color: #1070ae; font-weight: 700;"><%= total_jadwal %> data ditemukan</div>
+        <div class="row g-5">
+          <% if (total_jadwal > 0) { %>
+            <% list_jadwal_dokter.forEach(function(value, key) { %>
+              <div class="col-lg-6 team-item" key="<%= key %>">
+                <form method="POST" action="/reservasi/<%= value['_id'] %>/pengguna">
+                <div class="row g-0 bg-light rounded overflow-hidden">
+                  <div class="col-12 col-sm-5 h-100">
+                    <% if(value['dokter'] && value['dokter']['foto'] != null && value['dokter']['foto'] != '' && value['dokter']['foto'] != undefined){%>
+                      <img class="img-fluid h-100" src="/<%=value['dokter']['foto']%>" style="object-fit: cover">
+                    <%}else{%>
+                      <img class="img-fluid h-100" src="/images/image-notfound.png" style="object-fit: cover">
+                    <%}%>
+                  </div>
+                  
+                   <div class="col-12 col-sm-7 h-100 d-flex flex-column">
+                    <div class="mt-auto p-4">
+                      <h3 class="mb-4">
+                        <a href="/dokter/<%= value['dokter'] ? value['dokter']['_id'] : '' %>">
+                        <%= value['dokter'] ? value['dokter']['nama'] : '' %>
+                      </a>
+                      </h3>
+
+                      <h5 class="mb-2" style="color: #1070ae">
+                        <i class="fa fa-medkit" style="margin-right: 5px; font-size: 20px;"></i>
+                        <%= value['dokter'] ? value['dokter']['spesialis'] ? value['dokter']['spesialis']['nama'] : '' : '' %>
+                      </h5>
+
+                      <h4 style="color: #1070ae">
+                        <i class="fa fa-calendar-day" style="margin-right: 5px; font-size: 20px;"></i>
+                        <%= value['tanggal'] ? formatDate(value['tanggal']) : '' %>
+                      </h3>
+                      <h5 class="mb-2" style="color: #1070ae">
+                        <i class="fa fa-clock" style="margin-right: 5px; font-size: 20px;"></i>
+                        <%= value['waktu_mulai'] %> - <%= value['waktu_akhir'] %>
+                      </h4>
+
+
+                      <h4 class="mb-3">
+                        <span>
+                          <i class="fa fa-money-bill-wave" style="margin-right: 5px; font-size: 20px;"></i>
+                          Rp. <%= value['dokter'] ? value['dokter']['biaya'] ? formatNumberWithDots(value['dokter']['biaya']) :
+                          '-' : '-' %>,-
+                        </span>
+                      </h4>
+                      <button
+                        class="btn btn-dark border-0"
+                        style="background: #1070ae"
+                      >
+                        Reservasi
+                      </button>
+                    </div>
+                  
+                  </div>
+                </div>
+              </form>
+              </div>
+            
+              <% }); %>
+            <% } else { %> 
+              <div style="text-align: center; font-size: 20px; font-weight: 500; color: #1070ae; font-weight: 600;">
+                <img
+                  src="images/data_notfound.jpg"
+                  alt="sign in image"
+                  style="max-height: 200px"
+                />
+                <div>
+                Data tidak ditemukan
+              </div>
+              </div>
+              <% } %>
+
+         
+
+        </div>
+      </div>
+    </div>
+
+<%
+    function formatDate(date) {
+    // Define arrays for week names and month names
+    const weekNames = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ];
+    var monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+
+    // Get day of the week, day, month, and year components from the date
+    const weekName = weekNames[date.getDay()];
+    const day = String(date.getDate()).padStart(2, "0"); // Ensure two digits for day
+    const monthName = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+
+    // Return formatted date string in "WeekName, dd mmm yyyy" format
+    return `${weekName}, ${day} ${monthName} ${year}`;
+  }
+%>
+</div>
+<!-- Search Result End -->
+
+<% function formatNumberWithDots(number) { return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); } %> 
+<%- include('layouts/footer.ejs')%>

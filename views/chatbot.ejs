@@ -1,0 +1,439 @@
+<!-- Chatbot Start -->
+<div class="chat-popup-btn-container">
+  <button id="chat-popup-btn" onclick="toggleChatPopup()">
+    <i class="fa fa-comment"></i>
+  </button>
+</div>
+
+<div class="chat-popup-container">
+  <div id="chat-popup" class="container-fluid py-2">
+    <div class="container">
+      <div class="text-center mx-auto mb-2 mt-2" style="max-width: 500px">
+        <h1
+          class="display-4"
+          style="color: 1D2A4D; font-size: 30px; font-weight: 600"
+        >
+          Chatbot
+        </h1>
+      </div>
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <!-- Area pesan akan ditampilkan di sini -->
+        </div>
+        <!-- <input type="text" id="user-input" placeholder="Ketik pesan Anda..." />
+      <button onclick="sendMessage()">Kirim</button> -->
+      </div>
+      <div class="mt-2 mb-2" style="display: flex; justify-content: right">
+        <button
+          style="width: 80%"
+          class="daftar_pertanyaan-button"
+          onclick="askQuestionWithChoices(false)"
+        >
+          Tampilkan daftar pertanyaan?
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Chatbot End -->
+
+<script>
+  var timeout = 500;
+
+  const dokters_list = JSON.parse(
+    `<%- unescape(JSON.stringify(dokters).replace(/\\/g, '\\\\')) %>`
+  );
+
+  // Fungsi untuk menampilkan atau menyembunyikan pop-up chatbot
+  function toggleChatPopup() {
+    var chatPopup = document.getElementById("chat-popup");
+    if (chatPopup.style.display === "block") {
+      chatPopup.style.display = "none";
+    } else {
+      chatPopup.style.display = "block";
+      if ($(".chat-message").length == 0) {
+        askQuestionWithChoices(true);
+      }
+    }
+  }
+
+  var first_question = "Bantuan mana yang bisa saya bantu : ";
+
+  var first_question_choices = [
+    "Saya ingin melihat list dokter",
+    "Saya ingin membuat jadwal dokter",
+    "Saya ingin mengetahui lokasi tempat",
+    "Saya ingin menghubungi rumah sakit langsung",
+  ];
+
+  var jadwal_list = JSON.parse(`<%- unescape(JSON.stringify(jadwal)) %>`);
+
+  function askQuestionWithChoices(first = false) {
+    if (first) {
+      var nama_pengguna = `<%=nama_pengguna%>`;
+      displayChatbotMessage(
+        "Hi, " +
+          nama_pengguna +
+          "<br/>Selamat datang di chatbot Rumah Sakit Royal Victory!"
+      );
+    } else {
+      displayUserMessage("Tampilkan daftar pertanyaan");
+    }
+
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    setTimeout(function () {
+      var choicesHtml = first_question_choices
+        .map(function (choice, index) {
+          return `<button class="first-choices-button" onclick="selectFirstChoice(${index})">${choice}</button>`;
+        })
+        .join(" ");
+
+      displayChatbotMessage(first_question + "<br>" + choicesHtml);
+      $(".chat-container").scrollTop(
+        $(".chat-container")[0].scrollHeight + 200
+      );
+    }, timeout);
+  }
+
+  //pilih untuk melihat list dokter
+  function selectFirstChoice(choiceIndex) {
+    var selectedChoice = first_question_choices[choiceIndex];
+    displayUserMessage(selectedChoice);
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    setTimeout(function () {
+      if (choiceIndex === 0) {
+        var choicesHtml = dokters_list
+          .map(function (choice, index) {
+            return `<button style="text-align:left;" onclick="selectDokterChoice(${index})">${index + 1}. ${choice["nama"]}</button>`;
+          })
+          .join(" ");
+
+        displayChatbotMessage(
+          "Ini adalah list dokter di Rumah Sakit Royal Victory" +
+            "<br>" +
+            choicesHtml
+        );
+      } else if (choiceIndex == 1) {
+        const spesialis_list = JSON.parse(
+          `<%- unescape(JSON.stringify(spesialis)) %>`
+        );
+        var choicesHtml = spesialis_list
+          .map(function (choice, index) {
+            return `<button onclick="selectSpesialisChoice(${index})">${choice["nama"]}</button>`;
+          })
+          .join(" ");
+        displayChatbotMessage(
+          "Anda mencari dokter spesialis dibidang apa? <br>" + choicesHtml
+        );
+      } else if (choiceIndex == 2) {
+        displayChatbotMessage(
+          "Rumah Sakit Royal Victory terletak di Jl. Cendana No. 15, Kelurahan Mawar, Kecamatan Bunga Indah, Kota Bahagia, Provinsi Sejahtera."
+        );
+      } else if (choiceIndex == 3) {
+        displayChatbotMessage(
+          "Anda dapat menghubungi kami di <br/>021-1434792 atau dapat mengirim email ke royal.victory@rs.com. <br> Terima Kasih."
+        );
+      }
+
+      $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    }, timeout);
+  }
+
+  // Fungsi untuk memilih pilihan dokter dari pengguna untuk menampilkan profil dokter
+  function selectDokterChoice(choiceIndex) {
+    var selected_dokter = dokters_list[choiceIndex];
+    var spesialis = selected_dokter["spesialis"]
+      ? selected_dokter["spesialis"]["nama"]
+      : "";
+
+    displayUserMessage(selected_dokter["nama"]);
+
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    setTimeout(function () {
+      displayChatbotMessage(
+        "<div style='font-weight: 600; font-size: 20px;'>Profil " +
+          selected_dokter["nama"] +
+          "</div><br>" +
+          selected_dokter["deskripsi"]
+            .replace(/\r\n/g, "<br>")
+            .replace(/\\n/g, "<br>") +
+          "<br><br>" +
+          "<b>Spesialis:</b> " +
+          spesialis +
+          "<br>" +
+          "<b>Biaya:</b> Rp." +
+          selected_dokter["biaya"] +
+          "<br>"
+      );
+      $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    }, timeout);
+  }
+
+  //  Fungsi untuk memilih pilihan spesialis dari pengguna untuk
+  // menampilkan list dokter berdasarkan spesialis
+
+  function selectSpesialisChoice(choiceIndex) {
+    const spesialis_list = JSON.parse(
+      `<%- unescape(JSON.stringify(spesialis)) %>`
+    );
+    var selectedChoice = spesialis_list[choiceIndex]["nama"];
+
+    var number = 0;
+    var choicesHtml = dokters_list
+      .map(function (choice, index) {
+        if (selectedChoice == choice["spesialis"]["nama"]) {
+          number++;
+          return `<button style="text-align: left;" onclick="cekStatusReservasi(${index})">${number}. ${choice["nama"]}</button>`;
+        }
+      })
+      .join(" ");
+
+    displayUserMessage(selectedChoice);
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    setTimeout(function () {
+      displayChatbotMessage(
+        "Berikut ini adalah list dokter untuk spesialis " +
+          selectedChoice +
+          ". Silahkan pilih dokter yang anda mau. <br>" +
+          choicesHtml
+      );
+      $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+    }, timeout);
+  }
+
+  // Fungsi untuk melihat jadwal berdasarkan dokter yang dipilih
+  function cekStatusReservasi(choiceIndex) {
+    var selected_dokter = dokters_list[choiceIndex];
+    var spesialis = selected_dokter["spesialis"]
+      ? selected_dokter["spesialis"]["nama"]
+      : "";
+
+    displayUserMessage(selected_dokter["nama"]);
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+
+    //cek jadwal dokter
+    var selected_dokter = dokters_list[choiceIndex];
+
+    var jadwal_exist = false;
+    jadwal_list.map(function (choice, index) {
+      if (choice) {
+        if (choice["dokter"]) {
+          if (choice["dokter"]["_id"] == selected_dokter["_id"]) {
+            var new_date = `${formatDate(new Date(choice["tanggal"]))} ${
+              choice["waktu_mulai"]
+            }-${choice["waktu_akhir"]}`;
+
+            jadwal_exist = true;
+          }
+        }
+      }
+    });
+
+    if (jadwal_exist) {
+      setTimeout(function () {
+        displayChatbotMessage(
+          `Apakah Anda baru pertama kali melakukan reservasi, atau ini pemeriksaan lanjutan?
+        <br/><button style="text-align: left;" onclick="selectJadwalBerdasarkanDokter(${choiceIndex}, 'Pertama kali')">Pertama kali</button>
+        <br/><button style="text-align: left;" onclick="selectJadwalBerdasarkanDokter(${choiceIndex}, 'Pemeriksaan lanjutan')">Pemeriksaan lanjutan</button>
+        `
+        );
+        $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+      }, timeout);
+    } else {
+      setTimeout(function () {
+        displayChatbotMessage(
+          `Maaf, saat ini tidak ada jadwal dokter untuk 
+            ${selected_dokter["nama"]}.
+            <br/>Silahkan tunggu beberapa hari lagi untuk mengecek jadwal dokter ini atau memilih dokter lain. 
+            <br/><br/>Terima kasih.`
+        );
+        $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+      }, timeout);
+    }
+  }
+
+  // Fungsi untuk melihat jadwal berdasarkan dokter yang dipilih
+  function selectJadwalBerdasarkanDokter(choiceDokterIndex, status_reservasi) {
+    var selected_dokter = dokters_list[choiceDokterIndex];
+    var jadwal_exist = false;
+
+    var choicesJadwalDokter = jadwal_list
+      .map(function (choice, index) {
+        if (choice) {
+          if (choice["dokter"]) {
+            if (choice["dokter"]["_id"] == selected_dokter["_id"]) {
+              var new_date = `${formatDate(new Date(choice["tanggal"]))} ${
+                choice["waktu_mulai"]
+              }-${choice["waktu_akhir"]}`;
+
+              jadwal_exist = true;
+
+              return `<button style="text-align: left;" onclick="selectJadwalChoice(${choiceDokterIndex}, '${choice["_id"]}', '${choice["tanggal"]}', '${choice["waktu_mulai"]}', '${choice["waktu_akhir"]}')">
+            ${new_date}
+            </button>`;
+            }
+          }
+        }
+      })
+      .join(" ");
+
+    displayUserMessage(status_reservasi);
+
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+
+    if (jadwal_exist) {
+      setTimeout(function () {
+        displayChatbotMessage(
+          "Kapan anda ingin bertemu " +
+            selected_dokter["nama"] +
+            "<br>" +
+            choicesJadwalDokter
+        );
+        $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+      }, timeout);
+    } else {
+      setTimeout(function () {
+        displayChatbotMessage(
+          `Maaf, saat ini tidak ada jadwal dokter untuk 
+            ${selected_dokter["nama"]}.
+            <br/>Silahkan tunggu beberapa hari lagi untuk mengecek jadwal dokter ini atau memilih dokter lain. 
+            <br/><br/>Terima kasih.`
+        );
+        $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+      }, timeout);
+    }
+  }
+
+  // Fungsi untuk melihat jadwal berdasarkan dokter yang dipilih
+  function selectJadwalChoice(
+    selected_dokter_index,
+    idJadwal,
+    tanggal,
+    waktu_mulai,
+    waktu_akhir
+  ) {
+    var new_date = `${formatDate(
+      new Date(tanggal)
+    )} ${waktu_mulai}-${waktu_akhir}`;
+
+    displayUserMessage(new_date);
+
+    $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+
+    var selected_dokter = dokters_list[selected_dokter_index];
+
+    reservasiDokter(idJadwal);
+  }
+
+  async function reservasiDokter(idJadwal) {
+    // Options for the fetch request
+    const options = {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json", // Specify the content type
+        // You can add other headers if needed
+      },
+    };
+
+    // Make the fetch request
+    await fetch("/reservasi-dokter/" + idJadwal, options)
+      .then((response) => {
+        // Parse the JSON response
+        return response.json();
+      })
+      .then((data) => {
+        setTimeout(function () {
+          displayChatbotMessage(
+            "Terima kasih telah mengisi, silahkan tunggu konfirmasi atau mengecek di bagian history."
+          );
+          $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+        }, timeout);
+        // Process the fetched data
+        jadwal_list = data;
+        // You can perform further operations with the data here
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the fetch
+        setTimeout(function () {
+          displayChatbotMessage(
+            "Maaf terjadi kesalahan dalam melakukan reservasi. Silahkan coba lagi."
+          );
+          $(".chat-container").scrollTop($(".chat-container")[0].scrollHeight);
+        }, timeout);
+      });
+  }
+
+  // Fungsi untuk menampilkan pesan chatbot
+  function displayChatbotMessage(message) {
+    var chatMessages = document.getElementById("chat-messages");
+    var chatbotMessageDiv = document.createElement("div");
+    chatbotMessageDiv.className = "chat-message";
+    chatbotMessageDiv.innerHTML = message;
+    chatMessages.appendChild(chatbotMessageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatis scroll ke bawah
+  }
+
+  // Fungsi untuk menampilkan pesan pengguna di chatbot
+  function displayUserMessage(message) {
+    var chatMessages = document.getElementById("chat-messages");
+    var userMessageDiv = document.createElement("div");
+    userMessageDiv.className = "user-message";
+    userMessageDiv.innerHTML = "<div>" + message + "</div>";
+    chatMessages.appendChild(userMessageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight; // Otomatis scroll ke bawah
+  }
+
+  // Fungsi untuk mengirim pesan dari pengguna ke chatbot
+  function sendMessage() {
+    var userInput = document.getElementById("user-input").value;
+    if (userInput.trim() === "") return; // Jika input kosong, tidak melakukan apa-apa
+    displayUserMessage(userInput);
+
+    // Menampilkan jawaban dari chatbot
+    displayChatbotMessage("Terima kasih atas jawaban Anda.");
+
+    // Jika masih ada pertanyaan dengan pilihan yang tersisa, tanyakan pertanyaan berikutnya dengan pilihan
+    // if (currentQuestionIndex < questionsWithChoices.length) {
+    //   setTimeout(askQuestionWithChoices, 1000); // Menunggu 1 detik sebelum menampilkan pertanyaan berikutnya
+    // }
+
+    // Setelah mengirim pesan, kosongkan input
+    document.getElementById("user-input").value = "";
+  }
+
+  function formatDate(date) {
+    // Define arrays for week names and month names
+    var weekNames = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+    ];
+    var monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+
+    // Get day of the week, day, month, and year components from the date
+    const weekName = weekNames[date.getDay()];
+    const day = String(date.getDate()).padStart(2, "0"); // Ensure two digits for day
+    const monthName = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+
+    // Return formatted date string in "WeekName, dd mmm yyyy" format
+    return `${weekName}, ${day} ${monthName} ${year}`;
+  }
+</script>

@@ -1,0 +1,89 @@
+<%- include('layouts/head.ejs')%> <%- include('layouts/navbar.ejs')%>
+
+<div style="min-height: calc(100vh - 160px)">
+  <!-- Appointment Start -->
+  <div class="container-fluid py-5">
+    <div class="container py-3">
+      <div class="row gx-5">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <figure style="margin-bottom: 0px; margin-top: 50px">
+            <img
+              src="images/doctor-2.png"
+              alt="sign in image"
+              style="max-height: 400px"
+            />
+          </figure>
+        </div>
+        <div class="col-lg-6">
+          <div class="bg-white text-center rounded p-3">
+            <h2 class="mb-4">Profil Anda</h2>
+            <form method="POST" action = "/ubah-profil">
+              <div class="row g-3">
+                <div class="col-12">
+                  <input
+                    type="text"
+                    class="form-control bg-light border-0"
+                    placeholder="Nama"
+                    style="height: 50px; color: #4a4f57;"
+                    name="nama"
+                    required
+                    value="<%= user_data['nama'] %>"
+                  />
+                </div>
+                <div class="col-12">
+                  <input
+                    type="text"
+                    class="form-control bg-light border-0"
+                    placeholder="Username"
+                    style="height: 50px; color: #4a4f57;"
+                    name="username"
+                    required
+                    value="<%= user_data['username'] %>"
+                  />
+                </div>
+                <div class="col-12">
+                  <input
+                    type="password"
+                    class="form-control bg-light border-0"
+                    placeholder="Password"
+                    style="height: 50px; color: #4a4f57;"
+                    name="password"
+                  />
+                </div>
+                <div class="col-12">
+                  <input
+                    type="email"
+                    class="form-control bg-light border-0"
+                    placeholder="Email"
+                    style="height: 50px; color: #4a4f57;"
+                    name="email"
+                    required
+                    value="<%= user_data['email'] %>"
+                  />
+                </div>
+                <div class="col-12">
+                  <input
+                    type="text"
+                    class="form-control bg-light border-0"
+                    placeholder="No HP"
+                    style="height: 50px; color: #4a4f57;"
+                    name="noHp"
+                    required
+                    value="<%= user_data['noHp'] %>"
+                  />
+                </div>
+                <div class="col-12">
+                  <button class="btn btn-primary w-100 py-3" type="submit">
+                    Update Profil
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Appointment End -->
+</div>
+<%-include('layouts/footer.ejs')%>
