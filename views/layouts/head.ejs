@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <title>Royal Victory - <%= title %></title>
+
+    <link rel="icon" type="image/png" href="<%=dir%>images/logo-royal-victory.png" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Icon Font Stylesheet -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
+    <link href="<%=dir%>css/fonts/font-awesome.min.css" rel="stylesheet" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <!-- Libraries Stylesheet -->
+    <link href="<%=dir%>lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet" />
+    <link
+      href="<%=dir%>lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="<%=dir%>css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Template Stylesheet -->
+    <link href="<%=dir%>css/style.css" rel="stylesheet" />
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/css/toastr.min.css"
+    />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.2/js/toastr.min.js"></script>
+
+    <!-- datatable -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.bootstrap5.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.bootstrap5.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.bootstrap5.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.bootstrap5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.colVis.min.js"></script>
+
+    
+<style>
+  .chat-popup-btn-container{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: right;
+  }
+  /* CSS untuk tombol pop-up chatbot */
+  #chat-popup-btn {
+    /* position: fixed;
+    bottom: 20px;
+    left: 20px; */
+    background-color: #1ad8f5;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    z-index: 9999;
+  }
+
+  #chat-popup-btn i {
+    font-size: 24px;
+    line-height: 50px;
+  }
+
+  .chat-popup-container{
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    /* height: 50px; */
+    display: flex;
+    justify-content: right;
+    z-index: 10000;
+  }
+
+  /* CSS untuk pop-up chatbot */
+  #chat-popup {
+    /* position: fixed;
+    bottom: 90px;
+    left: 20px; */
+    width: 450px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgb(32 40 75 / 27%);
+    display: none;
+    z-index: 9998;
+    border: 1px solid #006ebc2e;
+  }
+
+  #chat-popup .close-btn {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  /* CSS untuk chatbot */
+  .chat-container {
+    padding: 20px;
+  }
+
+  .chat-messages {
+    /* max-height: 350px; */
+    overflow-y: auto;
+    padding-bottom: 10px;
+  }
+
+  .user-message div{
+    background-color: #DCF8C6;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    max-width: 80%;
+    overflow-wrap: anywhere;
+  }
+
+  .chat-message {
+    background-color: #EFEFEF;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    max-width: 85%;
+    width: fit-content;
+    overflow-wrap: anywhere;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+</style>
+
+
+
+  </head>
+
+  <body>
+    <%- toasts %> 
+    <% if (typeof error !== 'undefined' && error != "" && error != undefined) { %>
+    <script>
+      toastr.error(`<%= error %>`, "", {
+        timeOut: 2000,
+        closeButton: true,
+      });
+    </script>
+    <% } %>
+    <% if (typeof success !== 'undefined' && success != "" &&  success != undefined) { %>
+      <script>
+        toastr.success(`<%= success %>`, "", {
+          timeOut: 2000,
+          closeButton: true,
+        });
+      </script>
+      <% } %>
+  </body>
+</html>

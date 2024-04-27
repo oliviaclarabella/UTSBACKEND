@@ -1,0 +1,100 @@
+<!-- Navbar Start -->
+<div class="container-fluid sticky-top bg-white shadow-sm">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0">
+      <a href="/" class="navbar-brand">
+        <h2
+          class="m-0 text-primary"
+          style="color: #1070ae !important; font-weight: 600"
+        >
+          <img
+            src="<%=dir %>images/logo-royal-victory.png"
+            alt="logo"
+            style="max-height: 60px; margin-top: -7px"
+          />
+          Royal Victory
+        </h2>
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarCollapse"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav ms-auto py-0">
+          <a
+            href="/"
+            class="nav-item nav-link <%= page=='/' ? 'active' : ''; %>"
+            >Beranda</a
+          >
+          <a
+            href="/halaman-dokter"
+            class="nav-item nav-link <%= page=='/dokter' ? 'active' : ''; %>"
+            >Dokter</a
+          >
+          <a
+            href="/halaman-jadwal-dokter"
+            class="nav-item nav-link <%= page=='/jadwal-dokter' ? 'active' : ''; %>"
+            >Jadwal Dokter</a
+          >
+          <a
+            href="/histori"
+            class="nav-item nav-link <%= page=='/histori' ? 'active' : ''; %>"
+            >Histori Reservasi</a
+          >
+          <a
+            href="/kontak"
+            class="nav-item nav-link <%= page=='/kontak' ? 'active' : ''; %>"
+            >Kontak</a
+          >
+          <div class="nav-item dropdown">
+            <a
+              href="#"
+              class="nav-link dropdown-toggle"
+              data-bs-toggle="dropdown"
+              >Profil</a
+            >
+            <div class="dropdown-menu m-0">
+              <div
+                style="
+                  padding: 0.25rem 1rem;
+                  font-weight: 500;
+                  font-size: 16px;
+                  color: #1070ae;
+                  width: 160px;
+                  overflow-x: clip;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                "
+              >
+                <i
+                  class="fa fa-1x fa-address-book"
+                  style="margin-right: 5px"
+                ></i>
+
+                <!-- ambil data pengguna dari cookies dan tampilkan nama pengguna  -->
+                <% if (req && req.cookies && req.cookies.nama_pengguna) { %> <%=
+                req.cookies.nama_pengguna %> <% } %>
+              </div>
+
+
+              <a href="/profil" class="dropdown-item">Ubah Profil</a>
+
+              <!-- tampilkan tab pengaturan jika user memiliki hak akses admin  -->
+              <% if (req && req.cookies && req.cookies.admin == 1) { %>
+              <a href="/pengaturan" class="dropdown-item">Pengaturan</a>
+              <% } %>
+
+              <a href="/logout" class="dropdown-item">Keluar</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>
+<!-- Navbar End -->

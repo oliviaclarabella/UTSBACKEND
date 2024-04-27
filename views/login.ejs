@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <%- include('layouts/login-head.ejs')%>
+
+  <body>
+    <%- toasts %>
+    <div class="main" style="padding: 50px 0;">
+      <section class="sign-in" style="width: 100%">
+        <div class="container">
+          <div class="signin-content">
+            <div class="signin-image">
+              <figure style="margin-bottom: 0px">
+                <img
+                  src="images/doctor-1.png"
+                  alt="sign in image"
+                  style="max-height: 400px"
+                />
+              </figure>
+              <div
+                style="font-size: 14px; display: flex; justify-content: center"
+              >
+                <span style="display: flex">
+                  Belum memilih akun? Silahkan
+                  <a
+                    href="/registrasi"
+                    class="signup-image-link"
+                    style="margin-left: 3px"
+                    >registrasi</a
+                  >
+                </span>
+              </div>
+            </div>
+
+            <div class="signin-form">
+              <div
+                style="display: flex; align-items: center; margin-bottom: 25px"
+              >
+                <img
+                  src="images/logo-royal-victory.png"
+                  alt="logo"
+                  style="max-height: 50px"
+                />
+                <h2
+                  class="form-title"
+                  style="
+                    margin-bottom: 0px;
+                    margin-left: 14px;
+                    margin-right: 14px;
+                    color: #1c445c;
+                  "
+                >
+                  Login
+                </h2>
+                <img
+                  src="images/logo-royal-victory.png"
+                  alt="logo"
+                  style="max-height: 50px"
+                />
+              </div>
+              <form
+                method="POST"
+                class="register-form"
+                id="login-form"
+                action="/cek-login"
+              >
+                <div class="form-group">
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    placeholder="Username"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                  />
+                </div>
+                <% if(message){ %>
+                <div style="color: red; font-size: 16px;"><%= message %></div>
+                <% } %>
+                <div class="form-group form-button">
+                  <input
+                    type="submit"
+                    name="signin"
+                    id="signin"
+                    class="form-submit"
+                    value="Log in"
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- JS -->
+    <script src="js/jquery-3.4.1.min.js"></script>
+  </body>
+  <!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
