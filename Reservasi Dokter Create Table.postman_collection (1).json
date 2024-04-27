@@ -1,0 +1,87 @@
+{
+	"info": {
+		"_postman_id": "c5057499-c728-486b-a55f-26f4d46a4ccd",
+		"name": "Reservasi Dokter Create Table",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29467752"
+	},
+	"item": [
+		{
+			"name": "Create Table",
+			"item": [
+				{
+					"name": "Create Table User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/create_table/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"create_table",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Table Spesialis",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/create_table/spesialis",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"create_table",
+								"spesialis"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Table Dokter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/create_table/dokter",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"create_table",
+								"dokter"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Table Jadwal Dokter",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/create_table/jadwal_dokter",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"create_table",
+								"jadwal_dokter"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
