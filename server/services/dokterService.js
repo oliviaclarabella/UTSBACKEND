@@ -1,4 +1,5 @@
 const DokterModel = require("../models/DokterModel.js");
+const fs = require("fs").promises;
 
 async function getList(body = {}) {
   var list = [];
@@ -16,7 +17,9 @@ async function getList(body = {}) {
       filter["spesialis"] = spesialis;
     }
 
-    const result = await DokterModel.find(filter).populate("spesialis").sort({ nama: 1});
+    const result = await DokterModel.find(filter)
+      .populate("spesialis")
+      .sort({ nama: 1 });
 
     list = result;
   } catch (e) {
@@ -50,7 +53,7 @@ async function tambahData(req) {
     throw "Spesialis tidak boleh kosong";
   }
 
-  if(deskripsi){
+  if (deskripsi) {
     deskripsi = deskripsi.replace(/\r?\n/g, "\\n");
   }
 
@@ -63,9 +66,14 @@ async function tambahData(req) {
     status: "aktif",
   };
 
-  if(req.file){
-    newData.foto = req.file.path;
+  if (req.file) {
+    const data = await fs.readFile(req.file.path);
+    // Encode buffer as Base64
+    const base64Data = Buffer.from(data).toString("base64");
+    const dataUrl = `data:${req.file.mimetype};base64,${base64Data}`;
+    newData.foto = dataUrl;
   }
+
 
   try {
     await DokterModel.create(newData);
@@ -109,12 +117,12 @@ async function ubahData(id, req) {
     deskripsi,
   };
 
-  if(req.file && req.file != undefined){
-    var file_path = '';
-    if(req.file.path){
-      file_path = req.file.path.replace(/\\/g, '/');
-    }
-    new_data.foto = file_path;
+  if (req.file) {
+    const data = await fs.readFile(req.file.path);
+    // Encode buffer as Base64
+    const base64Data = Buffer.from(data).toString("base64");
+    const dataUrl = `data:${req.file.mimetype};base64,${base64Data}`;
+    new_data.foto = dataUrl;
   }
 
   var list = null;
@@ -131,7 +139,8 @@ async function ubahData(id, req) {
 // cari data berdasarkan id
 async function cariDataBerdasarkanId(id) {
   var list = null;
-  await DokterModel.findById(id).populate("spesialis")
+  await DokterModel.findById(id)
+    .populate("spesialis")
     .then((result) => {
       list = result;
     })

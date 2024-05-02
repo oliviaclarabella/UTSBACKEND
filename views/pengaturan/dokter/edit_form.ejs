@@ -20,12 +20,12 @@
 
             <div class="form-group" style="text-align: center;">
               <% if(data['foto'] != null && data['foto'] != ''){%>
-                <img id="previewImage" src="/<%=data['foto']%>" alt="Preview Image" style="max-width: 150px; max-height: 150px; border-radius: 300%; object-fit: cover;">
+                <img id="previewImage" src="<%=data['foto']%>" alt="Preview Image" style="max-width: 150px; max-height: 150px; border-radius: 300%; object-fit: cover;">
               <%} else {%>
                 <img id="previewImage" src="/images/image-notfound.png" alt="Preview Image" style="max-width: 150px; max-height: 150px; border-radius: 300%; object-fit: cover;">
                 <% } %>
               <br/><br/>
-              <input type="file" name="file" id="fileInput" required accept="image/png, image/jpeg, image/jpg">
+              <input type="file" name="file" id="fileInput" accept="image/png, image/jpeg, image/jpg">
             </div>
             
 
@@ -39,7 +39,7 @@
               <select class="form-control" id="spesialisSelect" name="spesialis" required>
                 <option value="">Pilih Spesialis</option>
                 <% list_spesialis.forEach(function(value) { %>
-                  <option value="<%= value['_id'] %>" <%= data ? data['spesialis'].toString() == value['_id'] ? 'selected': '' : '' %> > <%= value['nama'] %></option>
+                  <option value="<%= value['_id'] %>" <%= data ? data['spesialis']['_id'].toString() == value['_id'] ? 'selected': '' : '' %> > <%= value['nama'] %></option>
                 <% }); %>
               </select>
             </div>
