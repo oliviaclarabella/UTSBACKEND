@@ -121,7 +121,7 @@
                 <div class="row g-0 bg-light rounded overflow-hidden">
                   <div class="col-12 col-sm-5 h-100">
                     <% if(value['dokter'] && value['dokter']['foto'] != null && value['dokter']['foto'] != '' && value['dokter']['foto'] != undefined){%>
-                      <img class="img-fluid h-100" src="/<%=value['dokter']['foto']%>" style="object-fit: cover">
+                      <img class="img-fluid h-100" src="<%=value['dokter']['foto']%>" style="object-fit: cover">
                     <%}else{%>
                       <img class="img-fluid h-100" src="/images/image-notfound.png" style="object-fit: cover">
                     <%}%>
