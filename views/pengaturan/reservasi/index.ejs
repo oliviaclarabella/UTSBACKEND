@@ -140,8 +140,16 @@ function formatDate(date) {
             { "width": "100px", "targets": [1, 2] }, // Set specific column widths
             {
                 "targets": 0, // Assuming the date column is the first column (index 0)
-                "render": function (data, type, row) {
+                "render": function (data, type, row, index) {
                     // Parse the date string to a JavaScript Date object
+                    const list_reservasi = JSON.parse(
+                      `<%- unescape(JSON.stringify(list_reservasi).replace(/\\/g, '\\\\')) %>`
+                    );
+
+                    if(list_reservasi.length > 0){
+                     data = list_reservasi[index.row].tanggal_pengajuan; 
+                    }
+                    var date = new Date(data);
                     var date = new Date(data);
                     // Create an array of week names
                     var weekNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
