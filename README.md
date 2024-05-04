@@ -1,3 +1,7 @@
+Universitas Tarumanagara
+Teknik Informatika A 2022
+Kelompok 11 
+
 Sheila Tania - 535220028
 Olivia Clarabella Khotiera - 535220050
 
